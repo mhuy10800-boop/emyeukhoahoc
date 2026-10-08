@@ -3,99 +3,362 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechStore - Cửa Hàng Công Nghệ Hiện Đại</title>
+    <title>Trang Quản Trị - TechStore Admin</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#2563eb',
-                        secondary: '#1e40af',
-                    }
-                }
-            }
-        }
-    </script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+<body class="bg-gray-100 text-gray-800 font-sans min-h-screen">
 
-    <!-- Header Navigation -->
-    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md shadow-sm border-b">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-            <!-- Logo -->
-            <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                <i class="fa-solid fa-bolt text-2xl text-blue-600"></i>
-                <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">TechStore</span>
+    <!-- Top Navigation -->
+    <header class="bg-gray-900 text-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-user-shield text-blue-400 text-2xl"></i>
+                <span class="text-xl font-bold tracking-wide">TechStore Admin Panel</span>
             </div>
-
-            <!-- Search Bar -->
-            <div class="flex-1 max-w-md hidden md:block">
-                <div class="relative">
-                    <input type="text" id="searchInput" oninput="filterProducts()" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-10 pr-4 py-2 border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 focus:bg-white transition">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-gray-400 text-sm"></i>
-                </div>
-            </div>
-
-            <!-- Cart Trigger -->
-            <div class="flex items-center gap-4">
-                <button onclick="toggleCart()" class="relative p-2 text-gray-600 hover:text-blue-600 transition">
-                    <i class="fa-solid fa-cart-shopping text-xl"></i>
-                    <span id="cartBadge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
-                </button>
-            </div>
+            <a href="index.html" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition flex items-center gap-2">
+                <i class="fa-solid fa-store"></i> Xem Trang Cửa Hàng
+            </a>
         </div>
     </header>
 
-    <!-- Hero Banner -->
-    <section class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-12 px-4 mb-8">
-        <div class="max-w-7xl mx-auto text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-8">
-            <div class="space-y-4 max-w-xl">
-                <span class="bg-blue-500/30 text-blue-100 text-xs px-3 py-1 rounded-full uppercase tracking-wider font-semibold">Ưu đãi công nghệ 2026</span>
-                <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight">Công Nghệ Đỉnh Cao, Giá Cả Hợp Lý</h1>
-                <p class="text-blue-100 text-sm sm:text-base">Sở hữu những thiết bị công nghệ mới nhất với mức giá ưu đãi và dịch vụ giao hàng siêu tốc.</p>
-                <a href="#products" class="inline-block bg-white text-blue-600 font-bold px-6 py-3 rounded-full shadow-lg hover:bg-gray-100 transition">Khám Phá Ngay</a>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Dashboard Stats -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 font-medium uppercase">Tổng sản phẩm</p>
+                    <h3 id="statTotalProducts" class="text-2xl font-bold text-gray-900">0</h3>
+                </div>
             </div>
-            <div class="text-8xl text-blue-200/40 hidden md:block">
-                <i class="fa-solid fa-laptop-code"></i>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 font-medium uppercase">Tổng tồn kho</p>
+                    <h3 id="statTotalStock" class="text-2xl font-bold text-gray-900">0</h3>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-sack-dollar"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 font-medium uppercase">Giá trị kho hàng</p>
+                    <h3 id="statTotalValue" class="text-2xl font-bold text-gray-900">0 ₫</h3>
+                </div>
             </div>
         </div>
-    </section>
 
-    <!-- Main Content Grid -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow w-full pb-16" id="products">
-        <!-- Filter Tabs -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-            <h2 class="text-2xl font-bold text-gray-900">Sản Phẩm Nổi Bật</h2>
-            <div class="flex gap-2 overflow-x-auto pb-2 sm:pb-0" id="categoryButtons">
-                <!-- Dynamically rendered categories -->
-            </div>
-        </div>
-
-        <!-- Product Cards Grid -->
-        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Dynamically rendered products -->
-        </div>
-    </main>
-
-    <!-- Cart Drawer -->
-    <div id="cartModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm transition-opacity">
-        <div class="fixed inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl flex flex-col">
-            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
-                <h3 class="text-lg font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-bag-shopping text-blue-600"></i> Giỏ Hàng Của Bạn
-                </h3>
-                <button onclick="toggleCart()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
-            </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-4">
-                <!-- Cart items list -->
+            <!-- Form Thêm / Sửa Sản Phẩm -->
+            <div class="lg:col-span-1">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border sticky top-24">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-gray-900">
+                        <i class="fa-solid fa-plus-circle text-blue-600"></i>
+                        <span id="formTitle">Thêm Sản Phẩm Mới</span>
+                    </h2>
+                    
+                    <form id="productForm" onsubmit="handleSaveProduct(event)" class="space-y-4">
+                        <input type="hidden" id="productId">
+
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Tên sản phẩm *</label>
+                            <input type="text" id="productName" required placeholder="Ví dụ: iPhone 15 Pro Max" class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Danh mục *</label>
+                                <select id="productCategory" class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                                    <option value="Điện thoại">Điện thoại</option>
+                                    <option value="Laptop">Laptop</option>
+                                    <option value="Tablet">Tablet</option>
+                                    <option value="Đồng hồ">Đồng hồ</option>
+                                    <option value="Phụ kiện">Phụ kiện</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Số lượng kho *</label>
+                                <input type="number" id="productQuantity" min="0" required placeholder="10" class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Giá bán (VNĐ) *</label>
+                                <input type="number" id="productPrice" min="0" step="1000" required placeholder="25000000" class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Giá cũ (VNĐ)</label>
+                                <input type="number" id="productOldPrice" min="0" step="1000" placeholder="28000000" class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Chọn nguồn Ảnh -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-gray-600 mb-1">Hình ảnh sản phẩm</label>
+                            
+                            <!-- Tải file từ máy -->
+                            <div class="mb-2">
+                                <label class="block text-xs text-gray-500 mb-1">Tải ảnh từ máy tính:</label>
+                                <input type="file" id="productImageFile" accept="image/*" onchange="previewSelectedImage(event)" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                            </div>
+
+                            <!-- Hoặc Nhập URL -->
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">Hoặc dán Link/URL ảnh trực tuyến:</label>
+                                <input type="url" id="productImageUrl" placeholder="https://example.com/image.jpg" oninput="previewUrlImage()" class="w-full border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+
+                            <!-- Khung xem trước ảnh -->
+                            <div class="mt-3 relative hidden" id="previewContainer">
+                                <span class="text-xs text-gray-400 block mb-1">Xem trước ảnh:</span>
+                                <img id="imagePreview" class="w-full h-40 object-cover rounded-xl border">
+                            </div>
+                        </div>
+
+                        <div class="pt-2 flex gap-2">
+                            <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl shadow transition text-sm">
+                                <i class="fa-solid fa-floppy-disk"></i> Lưu Sản Phẩm
+                            </button>
+                            <button type="button" onclick="resetForm()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2.5 rounded-xl transition text-sm">
+                                Hủy
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
-            <div class="p-4 border-t bg-gray-50 space-y-3">
-                <div class="flex justify-between text-base font-bold text-gray-900">
-                    <span>Tổng tiền thanh toán:</span>
-                    <span id="cartTotal" class="text-blue-
+            <!-- Bảng Danh Sách Sản Phẩm -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+                    <div class="p-5 border-b flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <h2 class="text-lg font-bold text-gray-900">Danh Sách Sản Phẩm Kho</h2>
+                        <input type="text" id="searchAdmin" oninput="renderTable()" placeholder="Tìm theo tên sản phẩm..." class="border rounded-xl px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none w-full sm:w-64">
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 border-b text-xs uppercase text-gray-500 font-semibold">
+                                    <th class="py-3 px-4">Ảnh</th>
+                                    <th class="py-3 px-4">Tên & Danh mục</th>
+                                    <th class="py-3 px-4">Giá bán</th>
+                                    <th class="py-3 px-4 text-center">Số lượng</th>
+                                    <th class="py-3 px-4 text-right">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productTableBody" class="divide-y text-sm">
+                                <!-- Rendered dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        const STORAGE_KEY = 'techstore_products';
+
+        // Danh sách mặc định ban đầu nếu chưa có dữ liệu trong kho
+        const defaultProducts = [
+            { id: 1, name: 'iPhone 15 Pro Max 256GB', category: 'Điện thoại', price: 29990000, oldPrice: 34990000, quantity: 15, image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=500&auto=format&fit=crop&q=80' },
+            { id: 2, name: 'MacBook Pro M3 14 inch', category: 'Laptop', price: 39990000, oldPrice: 42990000, quantity: 8, image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&auto=format&fit=crop&q=80' },
+            { id: 3, name: 'Tai Nghe AirPods Max', category: 'Phụ kiện', price: 12490000, oldPrice: 13990000, quantity: 20, image: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500&auto=format&fit=crop&q=80' }
+        ];
+
+        let products = [];
+        let currentBase64Image = '';
+
+        function getProducts() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            if (!data) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultProducts));
+                return defaultProducts;
+            }
+            return JSON.parse(data);
+        }
+
+        function saveProducts(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            products = data;
+            renderTable();
+            updateStats();
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        }
+
+        // Đọc ảnh từ file máy tính chuyển sang dạng Base64
+        function previewSelectedImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentBase64Image = e.target.result;
+                    document.getElementById('imagePreview').src = currentBase64Image;
+                    document.getElementById('previewContainer').classList.remove('hidden');
+                    document.getElementById('productImageUrl').value = '';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Đọc ảnh từ Link/URL nhập tay
+        function previewUrlImage() {
+            const url = document.getElementById('productImageUrl').value.trim();
+            if (url) {
+                currentBase64Image = url;
+                document.getElementById('imagePreview').src = url;
+                document.getElementById('previewContainer').classList.remove('hidden');
+                document.getElementById('productImageFile').value = '';
+            } else {
+                document.getElementById('previewContainer').classList.add('hidden');
+            }
+        }
+
+        function handleSaveProduct(e) {
+            e.preventDefault();
+            const id = document.getElementById('productId').value;
+            const name = document.getElementById('productName').value.trim();
+            const category = document.getElementById('productCategory').value;
+            const quantity = parseInt(document.getElementById('productQuantity').value) || 0;
+            const price = parseFloat(document.getElementById('productPrice').value) || 0;
+            const oldPrice = parseFloat(document.getElementById('productOldPrice').value) || price;
+
+            const imageSrc = currentBase64Image || 'https://via.placeholder.com/300?text=No+Image';
+
+            if (id) {
+                // Cập nhật sản phẩm
+                const index = products.findIndex(p => p.id == id);
+                if (index !== -1) {
+                    products[index] = {
+                        ...products[index],
+                        name, category, quantity, price, oldPrice,
+                        image: imageSrc
+                    };
+                }
+            } else {
+                // Thêm sản phẩm mới
+                const newProduct = {
+                    id: Date.now(),
+                    name,
+                    category,
+                    quantity,
+                    price,
+                    oldPrice,
+                    image: imageSrc,
+                    rating: 5.0
+                };
+                products.unshift(newProduct);
+            }
+
+            saveProducts(products);
+            resetForm();
+            alert('Lưu thông tin sản phẩm thành công!');
+        }
+
+        function editProduct(id) {
+            const p = products.find(prod => prod.id == id);
+            if (!p) return;
+
+            document.getElementById('productId').value = p.id;
+            document.getElementById('productName').value = p.name;
+            document.getElementById('productCategory').value = p.category;
+            document.getElementById('productQuantity').value = p.quantity;
+            document.getElementById('productPrice').value = p.price;
+            document.getElementById('productOldPrice').value = p.oldPrice || p.price;
+            
+            document.getElementById('formTitle').innerText = 'Chỉnh Sửa Sản Phẩm';
+            currentBase64Image = p.image;
+            document.getElementById('imagePreview').src = p.image;
+            document.getElementById('previewContainer').classList.remove('hidden');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteProduct(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi kho?')) {
+                products = products.filter(p => p.id != id);
+                saveProducts(products);
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
+            document.getElementById('formTitle').innerText = 'Thêm Sản Phẩm Mới';
+            document.getElementById('previewContainer').classList.add('hidden');
+            currentBase64Image = '';
+        }
+
+        function updateStats() {
+            const totalProducts = products.length;
+            const totalStock = products.reduce((sum, p) => sum + (p.quantity || 0), 0);
+            const totalValue = products.reduce((sum, p) => sum + (p.price * (p.quantity || 0)), 0);
+
+            document.getElementById('statTotalProducts').innerText = totalProducts;
+            document.getElementById('statTotalStock').innerText = totalStock;
+            document.getElementById('statTotalValue').innerText = formatCurrency(totalValue);
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('productTableBody');
+            const query = document.getElementById('searchAdmin').value.toLowerCase();
+            
+            const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-400">Không có sản phẩm nào.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(p => `
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="py-3 px-4">
+                        <img src="${p.image}" alt="${p.name}" class="w-12 h-12 object-cover rounded-lg border">
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="font-semibold text-gray-900">${p.name}</div>
+                        <span class="inline-block bg-blue-100 text-blue-700 text-[10px] px-2 py-0.5 rounded-full font-medium mt-0.5">${p.category}</span>
+                    </td>
+                    <td class="py-3 px-4 font-semibold text-blue-600">
+                        ${formatCurrency(p.price)}
+                    </td>
+                    <td class="py-3 px-4 text-center">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold ${p.quantity > 5 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'}">
+                            ${p.quantity ?? 0}
+                        </span>
+                    </td>
+                    <td class="py-3 px-4 text-right space-x-2">
+                        <button onclick="editProduct(${p.id})" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition" title="Chỉnh sửa">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button onclick="deleteProduct(${p.id})" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition" title="Xóa">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Khởi tạo
+        products = getProducts();
+        renderTable();
+        updateStats();
+    </script>
+</body>
+</html>
